@@ -102,13 +102,20 @@ graph {
 
 [%header%autowidth,cols=6]
 |===
-|Name	|Used By		|Type		|Default	|Minimum
+|Name		|Used By	|Type		|Default	|Minimum
 |Description, notes
 
-|<<label>>
+|`fontsize`
+|Edges, Nodes, Graphs, Clusters	|double		|`14.0`		|`1.0`
+|Font size, in points, used for text.
+
+|`<<label>>`
 |Edges, Nodes, Graphs, Clusters	|lblString
 |`"\N"` (nodes) `""` (otherwise)				|
 |
+
+|`<<rankdir>>`	|Graphs		|rankdir	|`TB`		|
+|Sets direction of graph layout. dot only.
 |===
 
 [#label]
@@ -191,3 +198,93 @@ graph {
 ** Nodes
 ** Graphs
 ** Clusters
+
+[#rankdir]
+== rankdir
+
+[.lead]
+Sets direction of graph layout
+
+* type: _rankdir, default: `TB`_
+
+'''
+
+* For example, if `rankdir="LR"`, and barring cycles, an edge `T -> H`; will go from
+  left to right.
+* By default, graphs are laid out from top to bottom.
+
+* This attribute also has a side-effect in determining how record nodes are
+  interpreted.
+* See record shapes.
+
+.Top to bottom (default)
+--
+[source,dot]
+digraph {
+    rankdir="TB"
+    a -> b -> c;
+}
+
+[graphviz,target=tb]
+....
+digraph {
+    rankdir="TB"
+    a -> b -> c;
+}
+....
+--
+
+.Bottom to top
+--
+[source,dot]
+digraph {
+    rankdir="BT"
+    a -> b -> c;
+}
+
+[graphviz,target=bt]
+....
+digraph {
+    rankdir="BT"
+    a -> b -> c;
+}
+....
+--
+
+.Left to right
+[source,dot]
+digraph {
+    rankdir="LR"
+    a -> b -> c;
+}
+
+[graphviz,target=lr]
+....
+digraph {
+    rankdir="LR"
+    a -> b -> c;
+}
+....
+
+.Right to left
+[source,dot]
+digraph {
+    rankdir="RL"
+    a -> b -> c;
+}
+
+[graphviz,target=rl]
+....
+digraph {
+    rankdir="RL"
+    a -> b -> c;
+}
+....
+
+* Valid on:
+** Graphs
+
+[NOTE]
+====
+* dot only.
+====
