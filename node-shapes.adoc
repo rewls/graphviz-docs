@@ -1,0 +1,181 @@
+= Node Shapes
+:imagesdir: images
+
+* There are three main types of shapes : polygon-based, record-based and
+  user-defined.
+
+'''
+
+* The record-based shape has largely been superseded and greatly generalized by
+  HTML-like labels.
+* That is, instead of using `shape=record`, one might consider using `shape=none`,
+  `margin=0` and an HTML-like label.
+
+'''
+
+* The geometry and style of all node shapes are affected by the node attributes
+  `fixedsize`, `fontname`, `fontsize`, `height`, `label`, `style` and `width`.
+
+== Polygon-based Nodes
+
+* The possible polygon-based shapes are displayed below.
+
+'''
+
+* box
++
+[graphviz,target=box]
+....
+graph { n [shape=box,label=""] }
+....
+
+* none
++
+[graphviz,target=none]
+....
+graph { none [shape=none] }
+....
+
+== HTML-Like Labels
+
+[NOTE]
+====
+* This feature is only available on versions of Graphviz that are newer than
+  mid-November 2003.
+* In particular, it is not part of release 1.10.
+====
+
+[NOTE]
+====
+* The font markups for bold, italic, underlining, subscript and superscript
+  (`<B>`, `<I>`, `<U>`, `<SUB>` and `<SUP>`) are only available in versions
+  after 14 October 2011, and the markup for strike-through (`<S>`) requires
+  versions later than 15 September 2013.
+* In addition, all of these markups are currently only available via the cairo
+  and svg renderers.
+* The horizontal and vertical rules (`<HR>` and `<VR>`) are only available in
+  versions later than 8 July 2011.
+====
+
+[NOTE]
+====
+* For releases later than 9 September 2014, one can use `shape=plain` so that
+  the size of the node is totally determined by the label.
+* Otherwise, the node's margin, width and height values may cause the node to be
+  larger, so that edges are clipped away from the label.
+* In effect, `shape=plain` is shorthand for `shape=none width=0 height=0
+  margin=0`.
+====
+
+* If the value of a label attribute (label for nodes, edges, clusters, and
+  graphs, and the headlabel and taillabel attributes of an edge) is given as an
+  HTML string, that is, delimited by `<...>` rather than `"..."`, the label is
+  interpreted as an HTML description.
+* At their simplest, such labels can describe multiple lines of variously
+  aligned text as provided by ordinary string labels.
+* More generally, the label can specify a table similar to those provided by
+  HTML, with different graphical attributes at each level.
+
+'''
+
+* As HTML strings are processed like HTML input, any use of the `"`, `&`, `<`,
+  and `>` characters in literal text or in attribute values need to be replaced
+  by the corresponding escape sequence.
+* For example, if you want to use & in an href value, this should be represented
+  mkas &amp;.
+
+[NOTE]
+====
+* The features and syntax supported by these labels are modeled on HTML.
+* However, there are many aspects that are relevant to Graphviz labels that are
+  not in HTML and, conversely, HTML allows various constructs which are
+  meaningless in Graphviz.
+* We will generally refer to these labels as "HTML labels" rather than the
+  cumbersome "HTML-like labels" but the reader is warned that these are not
+  really HTML.
+* The grammar below describes precisely what Graphviz will accept.
+====
+
+* Although HTML labels are not, strictly speaking, a shape, they can be viewed
+  as a generalization of the record shapes described above.
+* In particular, if a node has set its `shape` attribute to `none` or
+  `plaintext`, the HTML label will be the node's shape.
+* On the other hand, if the node has any other shape (except `point`), the HTML
+  label will be embedded within the node the same way an ordinary label would
+  be.
+* Adding HTML labels to record-based shapes (record and Mrecord) is discouraged
+  and may lead to unexpected behavior because of their conflicting label schemas
+  and overlapping functionality.
+
+'''
+
+* The following is an abstract grammar for HTML labels.
+* Terminals, corresponding to elements, are shown in bold font, and nonterminals
+  in italics.
+* Square brackets `[` and `]` enclose optional items.
+* Vertical bars `|` separate alternatives.
+* Note that, as in HTML, element and attribute names are case-insensitive.
+** cf. sections 3.2.1 and 3.2.2 of the HTML 4.01 specification.
+
+[%autowidth]
+|===
+|_label_	|:	|_text_
+|_text_		|:	|_textitem_
+|		|\|	|_text textitem_
+|_textitem_	|:	|_string_
+|		|\|	|*<BR/>*
+|		|\|	|*<FONT>* _text_ *</FONT>*
+|		|\|	|*<I>* _text_ *</I>*
+|		|\|	|*<B>* _text_ *</B>*
+|		|\|	|*<U>* _text_ *</U>*
+|		|\|	|*<O>* _text_ *</O>*
+|		|\|	|*<SUB>* _text_ *</SUB>*
+|		|\|	|*<SUP>* _text_ *</SUP>*
+|		|\|	|*<S>* _text_ *</S>*
+|===
+
+* All non-printing characters such as tabs or newlines are ignored.
+* Above, a _string_ is any collection of printable characters, including spaces.
+
+'''
+
+* HTML comments are allowed within an HTML string.
+* They can occur anywhere provided that, if they contain part of an HTML
+  element, they must contain the entire element.
+
+'''
+
+* As is obvious from the above description, the interpretation of white space
+  characters is one place where HTML-like labels is very different from standard
+  HTML.
+* In HTML, any sequence of white space characters is collapsed to a single
+  space, If the user does not want this to happen, the input must use
+  non-breaking spaces &nbsp;.
+* This makes sense in HTML, where text layout depends dynamically on the space
+  available.
+* In Graphviz, the layout is statically determined by the input, so it is
+  reasonable to treat ordinary space characters as non-breaking.
+* In addition, ignoring tabs and newlines allows the input text to be formatted
+  for easier reading.
+
+'''
+
+* Each of the HTML elements has a set of optional attributes.
+* Attribute values must appear in double quotes.
+
+=== Font specification
+
+[source, dot]
+<FONT
+  COLOR="color"
+  FACE="fontname"
+  POINT-SIZE="value"
+>
+
+=== POINT-SIZE="value"
+
+* sets the size of the font, in points, used within the scope of
+  `<FONT>...</FONT>`.
+* This can be overridden by a POINT-SIZE attribute in descendents.
+* By default, the font size is determined by the fontsize attribute of the
+  corresponding node, edge or graph.
