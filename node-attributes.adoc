@@ -1,0 +1,14 @@
+= Node Attributes
+
+[.lead]
+Attributes you can set on graph nodes
+
+* Examples of node statements:
+** `node [name0=val0]` -- sets default node attribute `name0` to `val0`.
+*** Any node appearing after this inherits the new default attributes.
+** `n0 [name1=val1]` -- creates node `n0` and sets its attributes according to
+   the optional list and default attributes for nodes.
+
+---
+
+* shape -- Sets the shape of a node.
