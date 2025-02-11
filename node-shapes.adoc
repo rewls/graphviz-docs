@@ -36,6 +36,54 @@ graph { n [shape=box,label=""] }
 graph { none [shape=none] }
 ....
 
+== Styles for Nodes
+
+* The `style` attribute can be used to modify the appearance of a node.
+* At present, there are 8 style values recognized: `filled`, `invisible`,
+  `diagonals`, `rounded`, `dashed`, `dotted`, `solid` and `bold`.
+* As usual, the value of the style attribute can be a comma-separated list of
+  any of these.
+* If the style contains conflicts (e.g, `style="dotted, solid"`), the last
+  attribute wins.
+
+.`rounded`
+* The rounded style causes the polygonal corners to be smoothed.
+* Note that this style also applies to record-based nodes.
+* Indeed, the `Mrecord` shape is simply shorthand for setting this style.
+* Also, prior to 26 April 2005, the rounded and filled styles were mutually
+  exclusive.
++
+'''
+* As an example of rounding, dot uses the graph:
++
+[,dot]
+----
+digraph R {
+  rankdir=LR
+  node [style=rounded]
+  node1 [shape=box]
+  node2 [fillcolor=yellow, style="rounded,filled", shape=diamond]
+  node3 [shape=record, label="{ a | b | c }"]
+
+  node1 -> node2 -> node3
+}
+----
++
+====
+[graphviz,rounded]
+....
+digraph R {
+  rankdir=LR
+  node [style=rounded]
+  node1 [shape=box]
+  node2 [fillcolor=yellow, style="rounded,filled", shape=diamond]
+  node3 [shape=record, label="{ a | b | c }"]
+
+  node1 -> node2 -> node3
+}
+....
+====
+
 == HTML-Like Labels
 
 [NOTE]
